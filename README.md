@@ -1,6 +1,6 @@
 <div align="center">
 
-# Rafiq — RAG From Scratch
+# Rafiq
 
 Building a real AI assistant, one episode at a time, from a simple chatbot to a full RAG + multi-agent system.
 
