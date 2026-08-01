@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rafiq — AI with M. Hassan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080B14; --panel:#0E1526; --panel-2:#111C33; --border:#1D2A47;
+    --cyan:#3EDBEE; --cyan-dim:#1E5C66; --amber:#F2A93B;
+    --text:#E7ECF6; --muted:#8B98B5; --muted-2:#4E5C7A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%;}
+  body{
+    background:
+      radial-gradient(ellipse 1000px 600px at 12% -8%, rgba(62,219,238,0.08), transparent),
+      radial-gradient(ellipse 700px 500px at 100% 100%, rgba(242,169,59,0.03), transparent),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    display:flex; flex-direction:column;
+  }
+
+  /* ---------- header ---------- */
+  header{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:16px 28px; border-bottom:1px solid var(--border);
+    backdrop-filter:blur(6px);
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .logo-mark{
+    width:36px; height:36px; border-radius:50%;
+    border:1.5px solid var(--cyan);
+    display:flex; align-items:center; justify-content:center;
+    position:relative;
+    box-shadow:0 0 14px rgba(62,219,238,0.25);
+  }
+  .logo-mark::before{
+    content:''; position:absolute; width:6px; height:6px; border-radius:50%;
+    background:var(--cyan); top:6px; left:50%; transform:translateX(-50%);
+  }
+  .logo-mark::after{
+    content:''; position:absolute; width:6px; height:6px; border-radius:50%;
+    background:var(--cyan); bottom:6px; left:50%; transform:translateX(-50%);
+  }
+  .logo-mark svg{ width:14px; height:16px; }
+  .brand-text .name{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:16px; letter-spacing:0.01em; }
+  .brand-text .by{ font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--muted-2); margin-top:1px; }
+  .status{
+    display:flex; align-items:center; gap:7px;
+    font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--muted);
+  }
+  .status .dot{
+    width:7px; height:7px; border-radius:50%; background:#5FE18C;
+    box-shadow:0 0 6px #5FE18C; animation:breathe 2s ease-in-out infinite;
+  }
+  @keyframes breathe{ 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+
+  /* ---------- main / chat ---------- */
+  main{
+    flex:1; max-width:780px; width:100%; margin:0 auto;
+    padding:32px 28px 12px; display:flex; flex-direction:column; gap:18px;
+    overflow-y:auto;
+  }
+
+  .welcome{ margin:auto; text-align:center; max-width:480px; }
+  .welcome .wm{
+    width:56px; height:56px; margin:0 auto 20px; border-radius:50%;
+    border:1.5px solid var(--cyan); display:flex; align-items:center; justify-content:center;
+    box-shadow:0 0 24px rgba(62,219,238,0.2); position:relative;
+  }
+  .welcome .wm::before, .welcome .wm::after{
+    content:''; position:absolute; width:8px; height:8px; border-radius:50%; background:var(--cyan);
+  }
+  .welcome .wm::before{ top:9px; left:50%; transform:translateX(-50%); }
+  .welcome .wm::after{ bottom:9px; left:50%; transform:translateX(-50%); }
+  .welcome h1{
+    font-family:'Space Grotesk', sans-serif; font-size:24px; font-weight:700; margin-bottom:10px;
+  }
+  .welcome p{ color:var(--muted); font-size:14.5px; line-height:1.7; margin-bottom:26px; }
+  .suggestions{ display:flex; flex-direction:column; gap:8px; text-align:left; }
+  .suggestion{
+    background:var(--panel); border:1px solid var(--border); border-radius:9px;
+    padding:12px 16px; font-size:13.5px; color:var(--muted); cursor:pointer;
+    transition:border-color .15s, color .15s; font-family:'Inter', sans-serif;
+  }
+  .suggestion:hover{ border-color:var(--cyan-dim); color:var(--text); }
+  .suggestion .tag{ font-family:'JetBrains Mono', monospace; font-size:10px; color:var(--cyan); margin-right:8px; }
+
+  .msg{ display:flex; gap:12px; max-width:88%; }
+  .msg.user{ align-self:flex-end; flex-direction:row-reverse; }
+  .avatar{
+    width:30px; height:30px; border-radius:8px; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono', monospace; font-size:10.5px; font-weight:600;
+    margin-top:2px;
+  }
+  .msg.assistant .avatar{ background:rgba(62,219,238,0.1); color:var(--cyan); border:1px solid var(--cyan-dim); }
+  .msg.user .avatar{ background:rgba(242,169,59,0.1); color:var(--amber); border:1px solid rgba(242,169,59,0.3); }
+  .col{ display:flex; flex-direction:column; gap:6px; }
+  .sender{ font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--muted-2); }
+  .msg.user .sender{ text-align:right; }
+  .bubble{
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    padding:13px 16px; font-size:14.5px; line-height:1.7; color:#D3D9E8;
+    white-space:pre-wrap;
+  }
+  .msg.user .bubble{ background:rgba(242,169,59,0.05); border-color:rgba(242,169,59,0.18); }
+  .meta{
+    display:flex; gap:12px; font-family:'JetBrains Mono', monospace; font-size:10px; color:var(--muted-2);
+  }
+  .meta span b{ color:var(--muted); font-weight:500; }
+
+  .typing{ display:flex; gap:4px; padding:5px 2px; }
+  .typing span{
+    width:6px; height:6px; border-radius:50%; background:var(--cyan);
+    animation:blink 1.2s infinite ease-in-out;
+  }
+  .typing span:nth-child(2){ animation-delay:.2s; }
+  .typing span:nth-child(3){ animation-delay:.4s; }
+  @keyframes blink{ 0%,80%,100%{opacity:.2;} 40%{opacity:1;} }
+
+  /* ---------- composer ---------- */
+  .composer-wrap{ padding:14px 28px 26px; }
+  form{
+    display:flex; gap:10px; max-width:780px; width:100%; margin:0 auto;
+    background:var(--panel-2); border:1px solid var(--border); border-radius:14px;
+    padding:8px 8px 8px 18px; align-items:flex-end;
+  }
+  textarea{
+    flex:1; resize:none; background:transparent; border:none; outline:none;
+    color:var(--text); font-family:'Inter', sans-serif; font-size:14.5px;
+    height:26px; max-height:120px; padding:8px 0; line-height:1.5;
+  }
+  textarea::placeholder{ color:var(--muted-2); }
+  button{
+    background:var(--cyan); color:#04141A; border:none; border-radius:9px;
+    width:38px; height:38px; flex-shrink:0; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity .15s, transform .1s;
+  }
+  button:active{ transform:scale(0.94); }
+  button:disabled{ opacity:0.4; cursor:not-allowed; }
+  .hint{
+    max-width:780px; margin:8px auto 0; text-align:center;
+    font-family:'JetBrains Mono', monospace; font-size:10.5px; color:var(--muted-2);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="logo-mark"><svg viewBox="0 0 14 16" fill="none"><path d="M1 15V1L7 8L13 1V15" stroke="#3EDBEE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div class="brand-text">
+      <div class="name">Rafiq</div>
+      <div class="by">by AI with M. Hassan · EP-01</div>
+    </div>
+  </div>
+  <div class="status"><span class="dot"></span>online</div>
+</header>
+
+<main id="chat">
+  <div class="welcome" id="welcome">
+    <div class="wm"></div>
+    <h1>Ask Rafiq anything</h1>
+    <p>This is the baseline version — general knowledge only, no access to internal company data yet.</p>
+    <div class="suggestions">
+      <div class="suggestion" data-q="What's the difference between machine learning and deep learning?"><span class="tag">general</span>What's the difference between ML and deep learning?</div>
+      <div class="suggestion" data-q="Explain what an API is in simple terms."><span class="tag">general</span>Explain what an API is in simple terms.</div>
+      <div class="suggestion" data-q="What's our company's leave policy?"><span class="tag">internal</span>What's our company's leave policy?</div>
+    </div>
+  </div>
+</main>
+
+<div class="composer-wrap">
+  <form id="chat-form">
+    <textarea id="question" placeholder="Message Rafiq..." rows="1" required></textarea>
+    <button type="submit" id="send-btn" aria-label="Send">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M14 2L2 7.5L7.5 9M14 2L9.5 14L7.5 9M14 2L7.5 9" stroke="#04141A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </form>
+  <div class="hint">Rafiq can be wrong about anything outside its training data — that's exactly what this episode tests.</div>
+</div>
+
+<script>
+  const BACKEND_URL = "http://localhost:8000/api/ask";
+
+  const chat = document.getElementById("chat");
+  const welcome = document.getElementById("welcome");
+  const form = document.getElementById("chat-form");
+  const input = document.getElementById("question");
+  const sendBtn = document.getElementById("send-btn");
+
+  document.querySelectorAll(".suggestion").forEach(el => {
+    el.addEventListener("click", () => {
+      input.value = el.dataset.q;
+      form.requestSubmit();
+    });
+  });
+
+  input.addEventListener("input", () => {
+    input.style.height = "26px";
+    input.style.height = Math.min(input.scrollHeight, 120) + "px";
+  });
+
+  function addMessage(role, content, metaObj) {
+    if (welcome) { welcome.remove(); }
+
+    const wrap = document.createElement("div");
+    wrap.className = `msg ${role}`;
+
+    const avatar = document.createElement("div");
+    avatar.className = "avatar";
+    avatar.textContent = role === "user" ? "YOU" : "R";
+
+    const col = document.createElement("div");
+    col.className = "col";
+
+    const sender = document.createElement("div");
+    sender.className = "sender";
+    sender.textContent = role === "user" ? "You" : "Rafiq";
+    col.appendChild(sender);
+
+    const bubble = document.createElement("div");
+    bubble.className = "bubble";
+    bubble.textContent = content;
+    col.appendChild(bubble);
+
+    if (metaObj) {
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      meta.innerHTML = `<span><b>${metaObj.total_tokens}</b> tokens</span><span><b>${metaObj.latency_ms}</b>ms</span><span>finish: <b>${metaObj.finish_reason}</b></span>`;
+      col.appendChild(meta);
+    }
+
+    wrap.appendChild(avatar);
+    wrap.appendChild(col);
+    chat.appendChild(wrap);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function addTypingIndicator() {
+    const wrap = document.createElement("div");
+    wrap.className = "msg assistant";
+    wrap.id = "typing-indicator";
+    wrap.innerHTML = `
+      <div class="avatar">R</div>
+      <div class="col"><div class="bubble"><div class="typing"><span></span><span></span><span></span></div></div></div>
+    `;
+    chat.appendChild(wrap);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function removeTypingIndicator() {
+    document.getElementById("typing-indicator")?.remove();
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const question = input.value.trim();
+    if (!question) return;
+
+    addMessage("user", question);
+    input.value = "";
+    input.style.height = "26px";
+    sendBtn.disabled = true;
+    addTypingIndicator();
+
+    try {
+      const res = await fetch(BACKEND_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question }),
+      });
+
+      removeTypingIndicator();
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        addMessage("assistant", err.detail || "Something went wrong. Please try again.");
+        return;
+      }
+
+      const data = await res.json();
+      addMessage("assistant", data.answer, {
+        total_tokens: data.usage.total_tokens,
+        latency_ms: data.latency_ms,
+        finish_reason: data.finish_reason,
+      });
+    } catch (err) {
+      removeTypingIndicator();
+      addMessage("assistant", "Couldn't reach the backend. Is it running on localhost:8000?");
+    } finally {
+      sendBtn.disabled = false;
+    }
+  });
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      form.requestSubmit();
+    }
+  });
+</script>
+
+</body>
+</html>
