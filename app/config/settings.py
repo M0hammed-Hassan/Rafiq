@@ -19,9 +19,10 @@ MAX_QUESTION_CHARS = 300
 TOP_K = 4
 CHUNK_SIZE_TOKENS = 200
 CHUNK_OVERLAP_TOKENS = 50
+COMPANY_KB_SCOPE = "company_kb"
 SUPPORTED_DOC_EXTENSIONS = (".md", ".txt", ".pdf")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 DOCS_DIR = os.path.join(BASE_DIR, "data", "docs")
-CHROMA_DB = os.path.join(BASE_DIR, "data", "chroma_db")
+CHROMA_DIR = os.path.join(BASE_DIR, "data", "chroma_db")
 COLLECTION_NAME = "rafiq_docs"

@@ -1,5 +1,8 @@
+pypdf==6.14.2
 openai==2.48.0
+chromadb==1.5.9
 uvicorn==0.51.0
 fastapi==0.140.0
+tiktoken==0.13.0
 pydantic==2.13.4
 python-dotenv==1.2.2

@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EP-02 · What We're Building Today</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#080B14; --panel:#0E1526; --border:#1D2A47;
+    --cyan:#3EDBEE; --cyan-dim:#1E5C66; --amber:#F2A93B;
+    --text:#E7ECF6; --muted:#8B98B5; --muted-2:#4E5C7A;
+    --code-bg:#060A14; --green:#7CD9A0; --red:#E8697A;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -5%, rgba(62,219,238,0.07), transparent),
+      var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.7;
+  }
+  .rail{ max-width:900px; margin:0 auto; padding:0 28px 120px; }
+
+  header{ padding:56px 0 36px; text-align:center; }
+  .doc-id{
+    font-family:'JetBrains Mono', monospace; display:inline-block; font-size:13px;
+    letter-spacing:0.1em; color:var(--cyan); background:rgba(62,219,238,0.08);
+    border:1px solid var(--cyan-dim); padding:5px 12px; border-radius:3px; margin-bottom:20px;
+  }
+  h1.title{
+    font-family:'Space Grotesk', sans-serif; font-size:clamp(28px, 4.6vw, 44px);
+    font-weight:700; line-height:1.2; letter-spacing:-0.01em; margin-bottom:12px;
+  }
+  .subtitle{ color:var(--muted); font-size:16px; max-width:56ch; margin:0 auto; }
+
+  .section{ margin:56px 0; }
+  .section-title{
+    font-family:'Space Grotesk', sans-serif; font-size:19px; font-weight:600;
+    margin-bottom:6px; display:flex; align-items:center; gap:10px;
+  }
+  .section-tag{
+    font-family:'JetBrains Mono', monospace; font-size:11px; padding:3px 10px;
+    border-radius:10px; letter-spacing:0.05em;
+  }
+  .section-tag.last{ color:var(--red); background:rgba(232,105,122,0.1); border:1px solid rgba(232,105,122,0.3); }
+  .section-tag.today{ color:var(--green); background:rgba(124,217,160,0.1); border:1px solid rgba(124,217,160,0.3); }
+
+  /* recap card */
+  .recap-card{
+    display:flex; gap:20px; align-items:center; background:var(--panel);
+    border:1px solid var(--border); border-radius:12px; padding:22px; margin-top:18px;
+  }
+  @media (max-width:600px){ .recap-card{flex-direction:column; text-align:center;} }
+  .recap-fail{
+    flex-shrink:0; width:60px; height:60px; border-radius:50%;
+    border:2px solid var(--red); display:flex; align-items:center; justify-content:center;
+    font-size:26px; position:relative;
+  }
+  .recap-fail .pulse{
+    position:absolute; inset:-6px; border-radius:50%; border:2px solid var(--red);
+    opacity:0; animation:pulseRing 2s ease-out infinite;
+  }
+  @keyframes pulseRing{ 0%{opacity:0.6; transform:scale(0.9);} 100%{opacity:0; transform:scale(1.5);} }
+  .recap-text{ font-size:14.5px; color:var(--muted); }
+  .recap-text b{ color:var(--text); }
+  .recap-text .q{ font-family:'JetBrains Mono', monospace; color:var(--amber); font-size:13px; }
+
+  /* today intro */
+  .today-text{ font-size:15.5px; color:#C4CCDE; max-width:70ch; margin-top:10px; }
+  .today-text b{ color:var(--cyan); }
+
+  /* ===== animated diagram ===== */
+  .diagram-wrap{
+    background:var(--panel); border:1px solid var(--border); border-radius:16px;
+    padding:36px 24px; margin-top:28px; overflow-x:auto;
+  }
+  .lane-tag{
+    font-family:'JetBrains Mono', monospace; font-size:10.5px; letter-spacing:0.08em;
+    color:var(--amber); margin-bottom:16px; text-align:center;
+  }
+  .lane-row{ display:flex; align-items:center; justify-content:center; flex-wrap:nowrap; gap:0; min-width:780px; position:relative; }
+  .dnode{
+    background:var(--code-bg); border:1px solid var(--border); border-radius:9px;
+    padding:13px 15px; font-size:12px; color:var(--muted); text-align:center; font-weight:600;
+    min-width:100px; flex-shrink:0; opacity:0.35; transition:opacity .4s ease, border-color .4s ease, color .4s ease, box-shadow .4s ease;
+  }
+  .dnode.io{ border-style:dashed; font-weight:400; }
+  .dnode.lit{
+    opacity:1; color:var(--text); border-color:var(--cyan-dim);
+    box-shadow:0 0 18px rgba(62,219,238,0.18);
+  }
+  .arrow-col{ flex:0 0 44px; display:flex; align-items:center; justify-content:center; position:relative; flex-shrink:0; }
+  .arrow-line{ width:100%; height:2px; background:var(--border); position:relative; }
+  .arrow-line::after{
+    content:''; position:absolute; right:-1px; top:50%; transform:translateY(-50%);
+    border-width:4px 0 4px 6px; border-style:solid; border-color:transparent transparent transparent var(--border);
+    transition:border-left-color .4s ease;
+  }
+  .arrow-line.lit{ background:var(--cyan-dim); }
+  .arrow-line.lit::after{ border-left-color:var(--cyan-dim); }
+  .packet{
+    position:absolute; width:7px; height:7px; border-radius:50%;
+    background:var(--cyan); box-shadow:0 0 10px var(--cyan); top:calc(50% - 3.5px); left:0;
+    opacity:0;
+  }
+  .packet.go{ animation:travel 1.1s ease-in-out forwards; }
+  @keyframes travel{ 0%{left:0; opacity:0;} 12%{opacity:1;} 88%{opacity:1;} 100%{left:calc(100% - 7px); opacity:0;} }
+
+  .shared-index{ display:flex; justify-content:center; margin:18px 0; }
+  .shared-node{
+    background:linear-gradient(180deg, rgba(62,219,238,0.05), transparent);
+    border:1.5px solid var(--border); border-radius:10px; padding:14px 26px; text-align:center;
+    transition:border-color .4s ease, background .4s ease, box-shadow .4s ease;
+  }
+  .shared-node.lit{
+    border-color:var(--cyan); background:linear-gradient(180deg, rgba(62,219,238,0.14), rgba(62,219,238,0.02));
+    box-shadow:0 0 24px rgba(62,219,238,0.2);
+  }
+  .shared-node .st{ font-family:'Space Grotesk', sans-serif; font-weight:700; font-size:14px; color:var(--cyan); }
+  .shared-node .sd{ font-family:'JetBrains Mono', monospace; font-size:10px; color:var(--muted); margin-top:2px; }
+  .down-connector{ display:flex; justify-content:center; }
+  .down-connector span{ color:var(--cyan-dim); font-size:18px; font-family:'JetBrains Mono', monospace; }
+
+  .replay-btn{
+    display:block; margin:24px auto 0; font-family:'JetBrains Mono', monospace; font-size:12px;
+    color:var(--cyan); background:rgba(62,219,238,0.08); border:1px solid var(--cyan-dim);
+    padding:8px 18px; border-radius:20px; cursor:pointer; transition:background .2s;
+  }
+  .replay-btn:hover{ background:rgba(62,219,238,0.15); }
+
+  .closing{ text-align:center; margin-top:56px; padding-top:32px; border-top:1px solid var(--border); }
+  .closing p{ font-size:15.5px; color:var(--text); max-width:52ch; margin:0 auto; }
+  .closing b{ color:var(--cyan); }
+</style>
+</head>
+<body>
+
+<div class="rail">
+
+  <header>
+    <span class="doc-id">RAFIQ · EP-02</span>
+    <h1 class="title">What we're building today</h1>
+    <p class="subtitle">Quick recap of what happened last time, then exactly what changes today.</p>
+  </header>
+
+  <div class="section">
+    <div class="section-title"><span class="section-tag last">LAST TIME</span> What already happened</div>
+    <div class="recap-card">
+      <div class="recap-fail"><div class="pulse"></div>✕</div>
+      <div class="recap-text">
+        We asked Rafiq: <span class="q">"What's our leave policy?"</span><br>
+        <b>It guessed, or gave up.</b> Rafiq only ever answered from what the model already knew — it had no way to look anything up.
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="section-tag today">TODAY</span> What we're building</div>
+    <p class="today-text">We give Rafiq a private knowledge base, and teach it to <b>look something up before answering</b> instead of guessing. Same question from last time gets asked again at the end — this time it should actually get answered.</p>
+
+    <div class="diagram-wrap" id="diagram">
+      <div class="lane-tag">ONCE — PREPARING THE KNOWLEDGE BASE</div>
+      <div class="lane-row" id="lane1">
+        <div class="dnode io" data-i="0">Documents</div>
+        <div class="arrow-col" data-a="0"><div class="arrow-line"></div><div class="packet"></div></div>
+        <div class="dnode" data-i="1">Split into chunks</div>
+        <div class="arrow-col" data-a="1"><div class="arrow-line"></div><div class="packet"></div></div>
+        <div class="dnode" data-i="2">Convert to vectors</div>
+        <div class="arrow-col" data-a="2"><div class="arrow-line"></div><div class="packet"></div></div>
+        <div class="dnode io" data-i="3">Write to index</div>
+      </div>
+
+      <div class="down-connector"><span>↓</span></div>
+      <div class="shared-index"><div class="shared-node" id="sharedNode">
+        <div class="st">SHARED INDEX</div>
+        <div class="sd">written once, read every time</div>
+      </div></div>
+      <div class="down-connector"><span>↓</span></div>
+
+      <div class="lane-tag">EVERY TIME — ANSWERING A QUESTION</div>
+      <div class="lane-row" id="lane2">
+        <div class="dnode io" data-i="0">Question</div>
+        <div class="arrow-col" data-a="0"><div class="arrow-line"></div><div class="packet"></div></div>
+        <div class="dnode" data-i="1">Convert to vector</div>
+        <div class="arrow-col" data-a="1"><div class="arrow-line"></div><div class="packet"></div></div>
+        <div class="dnode" data-i="2">Find closest matches</div>
+        <div class="arrow-col" data-a="2"><div class="arrow-line"></div><div class="packet"></div></div>
+        <div class="dnode" data-i="3">Answer from matches</div>
+        <div class="arrow-col" data-a="3"><div class="arrow-line"></div><div class="packet"></div></div>
+        <div class="dnode io" data-i="4">Response + source</div>
+      </div>
+
+      <button class="replay-btn" onclick="playSequence()">▸ replay animation</button>
+    </div>
+  </div>
+
+  <div class="closing">
+    <p>One rule underneath all of it: Rafiq answers from what it finds — <b>or admits it doesn't know.</b> Never a guess dressed up as fact.</p>
+  </div>
+
+</div>
+
+<script>
+function playSequence(){
+  const lane1Nodes = document.querySelectorAll('#lane1 .dnode');
+  const lane1Arrows = document.querySelectorAll('#lane1 .arrow-col');
+  const lane2Nodes = document.querySelectorAll('#lane2 .dnode');
+  const lane2Arrows = document.querySelectorAll('#lane2 .arrow-col');
+  const shared = document.getElementById('sharedNode');
+
+  // reset
+  [...lane1Nodes, ...lane2Nodes].forEach(n => n.classList.remove('lit'));
+  [...lane1Arrows, ...lane2Arrows].forEach(a => {
+    a.querySelector('.arrow-line').classList.remove('lit');
+    const p = a.querySelector('.packet');
+    p.classList.remove('go');
+  });
+  shared.classList.remove('lit');
+
+  let t = 0;
+  const step = 550;
+
+  function lightNode(node){ node.classList.add('lit'); }
+  function fireArrow(col){
+    col.querySelector('.arrow-line').classList.add('lit');
+    const p = col.querySelector('.packet');
+    void p.offsetWidth; // restart animation
+    p.classList.add('go');
+  }
+
+  // lane 1 sequence
+  lightNode(lane1Nodes[0]);
+  lane1Arrows.forEach((col, i) => {
+    t += step;
+    setTimeout(() => { fireArrow(col); lightNode(lane1Nodes[i+1]); }, t);
+  });
+
+  t += step;
+  setTimeout(() => shared.classList.add('lit'), t);
+
+  // lane 2 sequence
+  t += step;
+  setTimeout(() => lightNode(lane2Nodes[0]), t);
+  lane2Arrows.forEach((col, i) => {
+    t += step;
+    setTimeout(() => { fireArrow(col); lightNode(lane2Nodes[i+1]); }, t);
+  });
+}
+
+// auto-play once when the diagram scrolls into view
+const target = document.getElementById('diagram');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if(e.isIntersecting){ playSequence(); io.unobserve(target); }
+  });
+}, {threshold:0.3});
+io.observe(target);
+</script>
+
+</body>
+</html>
