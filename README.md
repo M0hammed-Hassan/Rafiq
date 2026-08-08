@@ -19,15 +19,50 @@ Every episode ships real working code.
 
 > We don't just learn AI. We build it together.
 
+---
+
+## Repository Structre
+```
+app/
+|  ├── main.py              
+|  ├── config/
+|  │   └── settings.py       
+|  ├── prompts/
+|  │   └── system_prompts.py  
+|  ├── dto/
+|  │   └── ask.py              
+|  ├── core/                    
+|  │   ├── llm_client.py           
+|  │   ├── vector_store.py         
+|  │   ├── document_loader.py      
+|  │   ├── chunking.py              
+|  │   ├── retrieval.py             
+|  │   └── synthesis.py              
+|  ├── routes/
+|  │   └── ask_routes.py           
+|  ├── ingestion/
+|  ├── └── ingest.py    
+|  ├── frontend/
+|  │   └── rafiq.html             
+data/
+|  ├── docs/                
+|  └── chroma_db/  
+|  episodes/
+|  ├── ep01/                 
+|  └── ep02/  
+└── requirements.txt
+```
+
 ## Series roadmap
 
 | Ep | Title | Status | Watch |
 |----|-------|------|-------|
 | 01 | Baseline Chatbot | ✅ Live | [▶ Watch](https://www.youtube.com/watch?v=5wWKk_nD6dg&t=2537s) |
+| 02 | RAG With ChromaDB | ✅ Live | [▶ Watch]() |
 
 ## Tech stack
 
-`Python` · `FastAPI` · `OpenAI API` 
+`Python` · `FastAPI` · `OpenAI API`  . `ChromaDB`
 
 ## Getting started
 ```bash
@@ -43,6 +78,25 @@ conda activate rafiq
  
 pip install -r requirements.txt
 ```
+
+## Run it
+ 
+**1. Ingest the documents (do this first, and any time `data/docs/` changes)**
+ 
+```bash
+python -m app.ingestion.ingest
+```
+ 
+You should see each file's chunk count printed.
+ 
+**2. Start the server**
+ 
+```bash
+uvicorn app.main:app --reload --port 8000
+```
+ 
+Check `http://localhost:8000/health` — `indexed_chunks` should be greater than 0.
+ 
  
  
 ## Follow Me
