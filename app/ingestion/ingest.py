@@ -22,7 +22,7 @@ def run():
             )
             all_ids.append(f"{doc['source']}::{i}")
 
-        print(f"{doc["source"]}: {len(pieces)} chunk(s)")
+        print(f"{doc['source']}: {len(pieces)} chunk(s)")
 
     print(f"Embedding {len(all_chunks)} chunks...")
     embeddings = embed_batch(all_chunks)

@@ -28,7 +28,7 @@ def chat_completion(messages:list[dict], temperature: float = 0.2, max_tokens: i
     return {
         "answer":choice.message.content or "",
         "finish_reason": choice.finish_reason,
-        "usgae":
+        "usage":
         {
             "prompt_tokens":completion.usage.prompt_tokens,
             "completion_tokens": completion.usage.completion_tokens,
