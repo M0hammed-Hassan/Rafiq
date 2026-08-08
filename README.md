@@ -30,7 +30,7 @@ Every episode ships real working code.
 | Ep | Title | Status | Watch |
 |----|-------|------|-------|
 | 01 | Baseline Chatbot | ✅ Live | [▶ Watch](https://www.youtube.com/watch?v=5wWKk_nD6dg&t=2537s) |
-| 02 | RAG With ChromaDB | ✅ Live | [▶ Watch]() |
+| 02 | RAG With ChromaDB | ✅ Live | [▶ Watch](https://youtu.be/SkYNDKbW3gs) |
 
 ## Repository Structre
 ```
