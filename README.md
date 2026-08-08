@@ -19,6 +19,10 @@ Every episode ships real working code.
 
 > We don't just learn AI. We build it together.
 
+## Tech stack
+
+`Python` · `FastAPI` · `OpenAI API`  . `ChromaDB`
+
 ---
 
 ## Repository Structre
@@ -59,10 +63,6 @@ data/
 |----|-------|------|-------|
 | 01 | Baseline Chatbot | ✅ Live | [▶ Watch](https://www.youtube.com/watch?v=5wWKk_nD6dg&t=2537s) |
 | 02 | RAG With ChromaDB | ✅ Live | [▶ Watch]() |
-
-## Tech stack
-
-`Python` · `FastAPI` · `OpenAI API`  . `ChromaDB`
 
 ## Getting started
 ```bash
