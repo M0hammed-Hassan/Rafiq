@@ -96,7 +96,12 @@ uvicorn app.main:app --reload --port 8000
 ```
  
 Check `http://localhost:8000/health` — `indexed_chunks` should be greater than 0.
- 
+
+**3. Run frontend**
+```bash
+cd app/frontend
+python -m http.server 5500 
+```
  
  
 ## Follow Me
