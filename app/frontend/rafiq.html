@@ -111,8 +111,17 @@
   .msg.user .bubble{ background:rgba(242,169,59,0.05); border-color:rgba(242,169,59,0.18); }
   .meta{
     display:flex; gap:12px; font-family:'JetBrains Mono', monospace; font-size:10px; color:var(--muted-2);
+    flex-wrap:wrap; align-items:center;
   }
   .meta span b{ color:var(--muted); font-weight:500; }
+  .mode-badge{
+    font-family:'JetBrains Mono', monospace; font-size:10px; padding:2px 9px;
+    border-radius:10px; border:1px solid;
+  }
+  .mode-badge.direct{ color:var(--muted); background:rgba(139,152,181,0.08); border-color:var(--border); }
+  .mode-badge.retrieved{ color:var(--cyan); background:rgba(62,219,238,0.08); border-color:var(--cyan-dim); }
+  .mode-badge.strict_document{ color:#B98CE8; background:rgba(185,140,232,0.08); border-color:rgba(185,140,232,0.35); }
+  .bubble.needs-upload{ border-color:rgba(242,169,59,0.4); background:rgba(242,169,59,0.05); }
 
   .typing{ display:flex; gap:4px; padding:5px 2px; }
   .typing span{
@@ -122,6 +131,26 @@
   .typing span:nth-child(2){ animation-delay:.2s; }
   .typing span:nth-child(3){ animation-delay:.4s; }
   @keyframes blink{ 0%,80%,100%{opacity:.2;} 40%{opacity:1;} }
+
+  /* ---------- document chip + upload ---------- */
+  .doc-chip-wrap{ max-width:780px; margin:0 auto; padding:0 28px; }
+  .doc-chip{
+    display:none; align-items:center; gap:10px; background:rgba(185,140,232,0.08);
+    border:1px solid rgba(185,140,232,0.3); border-radius:10px; padding:9px 14px;
+    margin-bottom:10px; font-family:'JetBrains Mono', monospace; font-size:12px; color:#B98CE8;
+  }
+  .doc-chip.active{ display:flex; }
+  .doc-chip .doc-name{ flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .doc-chip button{
+    width:auto; height:auto; background:transparent; color:#B98CE8; padding:2px 8px;
+    border:1px solid rgba(185,140,232,0.35); border-radius:6px; font-size:10px;
+    font-family:'JetBrains Mono', monospace;
+  }
+  .upload-btn{
+    background:transparent; border:1px solid var(--border); color:var(--muted);
+  }
+  .upload-btn:hover{ border-color:var(--cyan-dim); color:var(--cyan); }
+  #file-input{ display:none; }
 
   /* ---------- composer ---------- */
   .composer-wrap{ padding:14px 28px 26px; }
@@ -157,7 +186,7 @@
     <div class="logo-mark"><svg viewBox="0 0 14 16" fill="none"><path d="M1 15V1L7 8L13 1V15" stroke="#3EDBEE" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div class="brand-text">
       <div class="name">Rafiq</div>
-      <div class="by">by AI with M. Hassan · EP-01</div>
+      <div class="by">by AI with M. Hassan</div>
     </div>
   </div>
   <div class="status"><span class="dot"></span>online</div>
@@ -167,39 +196,93 @@
   <div class="welcome" id="welcome">
     <div class="wm"></div>
     <h1>Ask Rafiq anything</h1>
-    <p>This is the baseline version — general knowledge only, no access to internal company data yet.</p>
+    <p>Rafiq now decides on its own: answer directly, search company documents, or ask you to upload one. Upload a file to make it answer from that document only.</p>
     <div class="suggestions">
-      <div class="suggestion" data-q="What's the difference between machine learning and deep learning?"><span class="tag">general</span>What's the difference between ML and deep learning?</div>
-      <div class="suggestion" data-q="Explain what an API is in simple terms."><span class="tag">general</span>Explain what an API is in simple terms.</div>
-      <div class="suggestion" data-q="What's our company's leave policy?"><span class="tag">internal</span>What's our company's leave policy?</div>
+      <div class="suggestion" data-q="Explain what an API is in simple terms."><span class="tag">direct</span>Explain what an API is in simple terms.</div>
+      <div class="suggestion" data-q="What's our company's leave policy?"><span class="tag">retrieved</span>What's our company's leave policy?</div>
+      <div class="suggestion" data-q="Can I claim alcohol as a business expense?"><span class="tag">retrieved</span>Can I claim alcohol as a business expense?</div>
     </div>
   </div>
 </main>
 
+<div class="doc-chip-wrap">
+  <div class="doc-chip" id="doc-chip">
+    <span>📎</span>
+    <span class="doc-name" id="doc-name"></span>
+    <button type="button" id="clear-doc-btn">clear</button>
+  </div>
+</div>
+
 <div class="composer-wrap">
   <form id="chat-form">
+    <button type="button" id="upload-btn" class="upload-btn" aria-label="Upload document">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2V11M8 2L4.5 5.5M8 2L11.5 5.5M3 11.5V13.5H13V11.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <input type="file" id="file-input" accept=".pdf,.txt,.md">
     <textarea id="question" placeholder="Message Rafiq..." rows="1" required></textarea>
     <button type="submit" id="send-btn" aria-label="Send">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M14 2L2 7.5L7.5 9M14 2L9.5 14L7.5 9M14 2L7.5 9" stroke="#04141A" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
   </form>
-  <div class="hint">Rafiq can be wrong about anything outside its training data — that's exactly what this episode tests.</div>
+  <div class="hint">With a document uploaded, Rafiq answers only from it. Otherwise, it decides on its own whether to answer directly or search company documents.</div>
 </div>
 
 <script>
   const BACKEND_URL = "http://localhost:8000/api/ask";
+  const UPLOAD_URL = "http://localhost:8000/api/upload";
+
+  let activeDocument = null; // { document_id, filename } | null
 
   const chat = document.getElementById("chat");
   const welcome = document.getElementById("welcome");
   const form = document.getElementById("chat-form");
   const input = document.getElementById("question");
   const sendBtn = document.getElementById("send-btn");
+  const uploadBtn = document.getElementById("upload-btn");
+  const fileInput = document.getElementById("file-input");
+  const docChip = document.getElementById("doc-chip");
+  const docName = document.getElementById("doc-name");
+  const clearDocBtn = document.getElementById("clear-doc-btn");
 
   document.querySelectorAll(".suggestion").forEach(el => {
     el.addEventListener("click", () => {
       input.value = el.dataset.q;
       form.requestSubmit();
     });
+  });
+
+  uploadBtn.addEventListener("click", () => fileInput.click());
+
+  fileInput.addEventListener("change", async () => {
+    const file = fileInput.files[0];
+    if (!file) return;
+
+    uploadBtn.disabled = true;
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch(UPLOAD_URL, { method: "POST", body: formData });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        addMessage("assistant", err.detail || "Upload failed. Please try a different file.");
+        return;
+      }
+      const data = await res.json();
+      activeDocument = { document_id: data.document_id, filename: data.filename };
+      docName.textContent = `${data.filename} — ${data.chunk_count} chunks indexed, strict mode active`;
+      docChip.classList.add("active");
+    } catch (err) {
+      addMessage("assistant", "Couldn't reach the backend to upload. Is it running on localhost:8000?");
+    } finally {
+      uploadBtn.disabled = false;
+      fileInput.value = "";
+    }
+  });
+
+  clearDocBtn.addEventListener("click", () => {
+    activeDocument = null;
+    docChip.classList.remove("active");
   });
 
   input.addEventListener("input", () => {
@@ -227,13 +310,24 @@
 
     const bubble = document.createElement("div");
     bubble.className = "bubble";
+    if (metaObj && metaObj.needs_upload) bubble.classList.add("needs-upload");
     bubble.textContent = content;
     col.appendChild(bubble);
 
     if (metaObj) {
       const meta = document.createElement("div");
       meta.className = "meta";
-      meta.innerHTML = `<span><b>${metaObj.total_tokens}</b> tokens</span><span><b>${metaObj.latency_ms}</b>ms</span><span>finish: <b>${metaObj.finish_reason}</b></span>`;
+      const sourcesText = metaObj.sources && metaObj.sources.length
+        ? metaObj.sources.join(", ")
+        : "none";
+      const modeLabel = { direct: "direct", retrieved: "company kb", strict_document: "uploaded doc" }[metaObj.mode] || metaObj.mode;
+      meta.innerHTML = `
+        <span class="mode-badge ${metaObj.mode}">${modeLabel}</span>
+        <span><b>${metaObj.total_tokens}</b> tokens</span>
+        <span><b>${metaObj.latency_ms}</b>ms</span>
+        <span>finish: <b>${metaObj.finish_reason}</b></span>
+        <span>sources: <b>${sourcesText}</b></span>
+      `;
       col.appendChild(meta);
     }
 
@@ -274,7 +368,10 @@
       const res = await fetch(BACKEND_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({
+          question,
+          document_id: activeDocument ? activeDocument.document_id : null,
+        }),
       });
 
       removeTypingIndicator();
@@ -290,6 +387,9 @@
         total_tokens: data.usage.total_tokens,
         latency_ms: data.latency_ms,
         finish_reason: data.finish_reason,
+        sources: data.sources,
+        mode: data.mode,
+        needs_upload: data.needs_upload,
       });
     } catch (err) {
       removeTypingIndicator();

@@ -6,7 +6,7 @@ from app.config.settings import CHAT_MODEL
 from fastapi import APIRouter, HTTPException
 from app.core.vectore_store import vector_store
 from app.dto.ask import AskRequest, AskResponse
-
+from app.core.orchesterator import handle_question
 
 logger = logging.getLogger("rafiq")
 router = APIRouter()
@@ -29,8 +29,8 @@ def ask(payload:AskRequest):
 
     started = time.perf_counter()
 
-    chunks = retrieve(question)
-    result = synthesize(question, chunks)
+    result = handle_question(question, payload.document_id)
+
 
     latency_ms = int((time.perf_counter() - started) * 1000)
 
@@ -49,4 +49,7 @@ def ask(payload:AskRequest):
         latency_ms=latency_ms,
         session_id=payload.session_id,
         finish_reason=result["finish_reason"],
+        mode = result["mode"],
+        needs_upload=result["needs_upload"],
+        sources = result["sources"]
     )

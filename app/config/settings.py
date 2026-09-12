@@ -26,3 +26,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__fil
 DOCS_DIR = os.path.join(BASE_DIR, "data", "docs")
 CHROMA_DIR = os.path.join(BASE_DIR, "data", "chroma_db")
 COLLECTION_NAME = "rafiq_docs"
+
+
+MAX_UPLOAD_MB = 10
+ROUTER_MAX_TOKENS = 3
+ROUTER_TEMPERATURE = 0.0

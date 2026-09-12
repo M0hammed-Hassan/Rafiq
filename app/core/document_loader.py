@@ -1,3 +1,4 @@
+import io
 import os
 from pypdf import PdfReader
 from app.config.settings import DOCS_DIR, SUPPORTED_DOC_EXTENSIONS
@@ -45,3 +46,28 @@ def load_documents() -> list[dict]:
         )
 
     return documents
+
+
+def _extract_text(filename:str, content:bytes):
+    ext = os.path.splitext(filename)[1].lower()
+
+    if ext == ".pdf":
+        reader = PdfReader(io.BytesIO(content))
+        pages = [page.extract_text() or "" for page in reader.pages]
+        return "\n\n".join(pages).strip()
+
+    return content.decode("utf-8").strip()
+
+def extract_uploaded_document(filename: str, content:bytes) -> str:
+    ext = os.path.splitext(filename)[1].lower()
+    if ext not in SUPPORTED_DOC_EXTENSIONS:
+        raise ValueError(
+            f"Unsupported file type: {ext} -- Supported types only: {SUPPORTED_DOC_EXTENSIONS}"
+        )
+    text = _extract_text(filename, content)
+
+    if not text:
+        raise ValueError("No extractable text found in this file")
+
+    return text
+    

@@ -1,6 +1,7 @@
 import logging
 from fastapi import FastAPI
-from app.routes.ask_routes import router
+from app.routes.ask_routes import router as ask_router
+from app.routes.upload_routes import router as upload_router
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -14,4 +15,5 @@ app.add_middleware(
     allow_methods=["POST"],
 )
 
-app.include_router(router)
+app.include_router(ask_router)
+app.include_router(upload_router)
