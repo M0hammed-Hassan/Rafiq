@@ -31,6 +31,8 @@ Every episode ships real working code.
 |----|-------|------|-------|
 | 01 | Baseline Chatbot | ✅ Live | [▶ Watch](https://www.youtube.com/watch?v=5wWKk_nD6dg&t=2537s) |
 | 02 | RAG With ChromaDB | ✅ Live | [▶ Watch](https://youtu.be/SkYNDKbW3gs) |
+| 03 | RAG With Decision Making | ✅ Live | [▶ Watch](https://youtu.be/h8HZJYQstFk) |
+
 
 ## Repository Structre
 ```
@@ -41,16 +43,22 @@ app/
 |  ├── prompts/
 |  │   └── system_prompts.py  
 |  ├── dto/
-|  │   └── ask.py              
+|  │   └── ask.py     
+|  │   └── upload.py              
 |  ├── core/                    
 |  │   ├── llm_client.py           
 |  │   ├── vector_store.py         
 |  │   ├── document_loader.py      
 |  │   ├── chunking.py              
 |  │   ├── retrieval.py             
-|  │   └── synthesis.py              
+|  │   └── synthesis.py
+|  │   └── ingestion.py              
+|  │   └── router.py              
+|  │   └── direct_agent.py              
+|  │   └── orchesterator.py              
 |  ├── routes/
-|  │   └── ask_routes.py           
+|  │   └── ask_routes.py  
+|  │   └── upload_routes.py           
 |  ├── ingestion/
 |  ├── └── ingest.py    
 |  ├── frontend/
@@ -61,6 +69,7 @@ data/
 |  episodes/
 |  ├── ep01/                 
 |  └── ep02/  
+|  └── ep03/  
 └── requirements.txt
 ```
 
