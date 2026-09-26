@@ -14,11 +14,7 @@ npm run dev
 ```
 
 Opens on `http://localhost:5173`. By default it calls your backend at
-`http://localhost:8000/api`. To point elsewhere, create a `.env` file:
-
-```
-VITE_API_BASE=https://your-backend-host/api
-```
+`http://localhost:8000/api`.
 
 ## Build for production
 
