@@ -111,8 +111,10 @@ Check `http://localhost:8000/health` — `indexed_chunks` should be greater than
 **3. Run frontend**
 ```bash
 cd app/frontend
-python -m http.server 5500 
+npm install 
+npm run dev
 ```
+Check the chatbot interface on localhost at the port 5173.
  
  
 ## Follow Me
