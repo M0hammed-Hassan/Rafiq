@@ -4,6 +4,7 @@
 
 Building a real AI assistant, one episode at a time, from a simple chatbot to a full RAG + multi-agent system.
 
+
 [![YouTube](https://img.shields.io/badge/YouTube-Watch_the_series-red?logo=youtube&logoColor=white)](https://youtube.com/playlist?list=PLcIPbLAATTWg&si=iqf87k4DNqPLd9xq)
 [![Subscribe](https://img.shields.io/badge/Subscribe-AI_with_M._Hassan-3EDBEE?logo=youtube&logoColor=white)](https://youtube.com/@aiwithmhassan?sub_confirmation=1)
 
@@ -32,7 +33,7 @@ Every episode ships real working code.
 | 01 | Baseline Chatbot | ✅ Live | [▶ Watch](https://www.youtube.com/watch?v=5wWKk_nD6dg&t=2537s) |
 | 02 | RAG With ChromaDB | ✅ Live | [▶ Watch](https://youtu.be/SkYNDKbW3gs) |
 | 03 | RAG With Decision Making | ✅ Live | [▶ Watch](https://youtu.be/h8HZJYQstFk) |
-
+| 04 | Refactoring | ✅ Live | [▶ Watch](https://youtu.be/VPNfCfmUzdg) |
 
 ## Repository Structre
 ```
