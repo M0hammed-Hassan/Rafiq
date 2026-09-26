@@ -1,4 +1,4 @@
-# Rafiq — AI Workplace Companion
+# Rafiq — Frontend
 
 A complete React app (Vite) for the Rafiq assistant. Talks to your existing
 backend with no changes required:
