@@ -34,6 +34,7 @@ Every episode ships real working code.
 | 02 | RAG With ChromaDB | ✅ Live | [▶ Watch](https://youtu.be/SkYNDKbW3gs) |
 | 03 | RAG With Decision Making | ✅ Live | [▶ Watch](https://youtu.be/h8HZJYQstFk) |
 | 04 | Refactoring | ✅ Live | [▶ Watch](https://youtu.be/VPNfCfmUzdg) |
+| 05 | Optimizing UI | ✅ Live | [▶ Watch](https://youtu.be/cK9py16X1LU?si=WnesnwtFzfFpMSf-) |
 
 ## Repository Structre
 ```
